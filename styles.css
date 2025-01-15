@@ -43,17 +43,28 @@
   --accent-color: rgb(8, 143, 155);
   --background-color: radial-gradient(transparent, black);
   --border-radius: 20px;
-  --font-family: "Playwrite US Trad";
+  --font-family: "Caveat";
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Body Styles */
 body {
-  background: var(--background-color), url(./Guitar.jpg);
+  background: var(--background-color), url(./Roundel.png);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: cover;
+  background-position: center center;
+  background-size: contain;
   margin: 0;
   padding: 0;
+}
+
+html, body {
+  height: 100vh;
 }
 
 header,
@@ -72,10 +83,20 @@ header {
   border-bottom-right-radius: var(--border-radius);
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header, main {
+  flex: 1;
+}
+
 .head_Text {
   margin: 0;
   padding: 5px;
-  /* font-size: 40px; */
+  font-size: 40px;
 }
 
 /* Navigation Styles */
@@ -90,14 +111,15 @@ header {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 40px;
-  width: 115px;
+  height: 50px;
+  width: 175px;
   margin: 5px;
   border-radius: var(--border-radius);
+  border: 2px solid rgba(8, 143, 155, 0.5);
   background-color: rgb(8, 143, 155, 0.5);
   color: var(--main-color);
   font-family: var(--font-family);
-  font-size: 15px;
+  font-size: 25px;
 }
 
 .nav:hover {
@@ -110,29 +132,33 @@ header {
 /* Content Styles */
 
 .Landing {
-  display: grid;
+  display: flex;
+  justify-content: center;
   align-items: center;
   font-family: var(--font-family);
   font-size: 25px;
   font-weight: 100;
   text-align: center;
-  color: var(--accent-color);
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: var(--main-color);
-  height: 500px;
+  color: var(--main-color);
+  height: 75vh;
+  margin: auto;
+}
+
+.Landing > p {
+  display: inline-block;
+  padding: 20px;
+  border-radius: 30px;
+  border: 5px solid rgba(8, 143, 155, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
+  max-width: 95vw;
 }
 
 .bio {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
-  margin: 20px;
-  padding: 20px;
-}
-
-.bio > .text {
-  height: 300px;
+  align-items: top;
+  margin: 10px;
 }
 
 #biopic {
@@ -140,8 +166,13 @@ header {
   height: 400px;
   border-radius: 50%;
   margin: 10px;
-  border: 5px solid var(--main-color);
+  border: 5px solid var(--accent-color);
   background-color: var(--main-color);
+}
+
+.bio > .text {
+  background-color: rgba(102, 255, 240, 0.7);
+  font-size: calc(.9vh + .9vw);
 }
 
 .text {
@@ -151,12 +182,12 @@ header {
   font-size: calc(1vh + 1vw);
   font-weight: 100;
   height: 5%;
-  width: 60%;
+  width: 70%;
   padding: 7px;
   border: 5px solid var(--accent-color);
   border-radius: 30px;
   text-align: center;
-  background-color: rgb(165, 254, 245, .75);
+  background-color: rgb(165, 254, 245, 0.8);
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
 }
@@ -244,17 +275,17 @@ audio::-webkit-media-controls-panel{
 }
 
 .Info {
-  display: grid;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 4%;
+  display: flex; /* Use Flexbox for centering */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: top; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 75vh; /* Full-page height */
 }
 
 .links {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* Flexbox for internal centering */
+  justify-content: center; /* Center text horizontally */
+  align-items: center; /* Center text vertically */
   height: 75px;
   width: 175px;
   border-radius: 50px;
@@ -263,8 +294,11 @@ audio::-webkit-media-controls-panel{
   font-weight: 100;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: black;
-  background-color: rgb(8, 143, 155, 0.5);
-  margin: 20px;
+  background-color: rgba(102, 255, 240, 0.7); /* Corrected `rgb` to `rgba` */
+  border: 5px solid rgba(8, 118, 141);
+  margin: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .links:hover {
@@ -274,9 +308,7 @@ audio::-webkit-media-controls-panel{
 
 /* Footer Styles */
 footer {
-  position: relative;
-  left: 0;
-  bottom: 0;
-  width: 100%;
+  text-align: center;
   color: var(--accent-color);
+  padding: 1rem;
 }
