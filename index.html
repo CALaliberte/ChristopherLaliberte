@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Christopher Laliberte</title>
-    <link rel="icon" href="./BustCircle.png" type="image/x-icon"/>
+    <link rel="icon" href="./TTMRoundel.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
     <script src="https://apis.google.com/js/api.js"></script>
@@ -14,12 +14,12 @@
 <body>
     <div class="wrapper">
       <header>
-          <h1 class="head_Text"><em>Christopher Laliberte</em></h1>
+          <button class="head_Text" id="secretButton" onclick="Landing()"><em>Christopher Laliberte</em></button>
           <p class="head_Text"><em>The Tech Musician</em></p>
           <nav class="nav_container">
-          <button class="nav" onclick="Biography()"><em>Biography</em></button>
-          <button class="nav" onclick="Scores()"><em>Compositions</em></button>
-          <button class="nav" onclick="Contact()"><em>Contact Me</em></button>
+            <button class="nav" onclick="Biography()"><em>Biography</em></button>
+            <button class="nav" onclick="Scores()"><em>Compositions</em></button>
+            <button class="nav" onclick="Contact()"><em>Contact Me</em></button>
           </nav>
       </header>
       
@@ -31,8 +31,6 @@
           <div id="video">
             <iframe
             id="youtube-video"
-            width="560"
-            height="315"
             frameborder="0"
             title="Latest Video"
             allowfullscreen></iframe>
@@ -42,7 +40,7 @@
       <div class="Biography">
           <div class="bio">
               <img id="biopic" src="./BustCircleBW.jpg" alt="Author holding guitar">
-          <p class="text"><em>Christopher Laliberte is a composer, educator, and musician based in Warren, Maine. Currently completing a Bachelor of Music in Contemporary and Popular Music at the University of Maine at Augusta, he has achieved Summa Cum Laude honors while studying under distinguished mentors such as John Mehrmann (composition) and Dr. Christine Letcher (music theory).<br><br>
+              <p class="text"><em>Christopher Laliberte is a composer, educator, and musician based in Warren, Maine. Currently completing a Bachelor of Music in Contemporary and Popular Music at the University of Maine at Augusta, he has achieved Summa Cum Laude honors while studying under distinguished mentors such as John Mehrmann (composition) and Dr. Christine Letcher (music theory).<br><br>
             Christopher’s diverse compositional portfolio spans classical, jazz, rock, and contemporary genres. Notable works include La Mer Tumultueuse et Envoûtant, a modern classical piece for string quintet and seven-string guitar inspired by the Lydian Chromatic Concept, and Toi et Moi à l’Unisson, an alternative synth-rock piece exploring innovative chromatic harmonies. His music showcases his versatility and creativity in the medium.<br><br>
             Beyond composition, Christopher has demonstrated a strong commitment to education and community engagement. He serves as a music tutor at UMA, guiding students through advanced music theory and arranging. He has also established groundbreaking music programs at the Bolduc Correctional Facility and Maine State Prison, equipping residents with essential skills in performance, theory, and recording arts.<br><br>
             Christopher is proficient in industry-standard tools such as Sibelius, Finale, and Pro Tools, and holds certifications in voice training through Estill Voice International. His dedication to excellence has been recognized with multiple academic honors, including placement on the University of Maine at Augusta's President’s and Dean's Lists.<br><br>
