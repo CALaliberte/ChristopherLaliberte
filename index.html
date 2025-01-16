@@ -7,6 +7,7 @@
     <link rel="icon" href="./BustCircle.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
+    <script src="https://apis.google.com/js/api.js"></script>
     <script src="./scripts.js"></script>
 </head>
 
@@ -26,6 +27,16 @@
           <p>
             <em>Thank you for visiting! Dive into Christopher's creative world by using the navigation bar above. Explore his journey as a musician, from his humble beginnings to his innovative blend of music and theory. Discover and experience his compositions, crafted to inspire and resonate with listeners. Stay connected through his social media platforms to follow his latest updates, insights, and creative ventures. Enjoy your visit!</em>   
           </p>
+          <p id="videoTag">Latest Release</p>
+          <div id="video">
+            <iframe
+            id="youtube-video"
+            width="560"
+            height="315"
+            frameborder="0"
+            title="Latest Video"
+            allowfullscreen></iframe>
+          </div>
       </div>
 
       <div class="Biography">
@@ -41,6 +52,7 @@
 
       <div class="Scores">
           <div class="Score-Body">
+              <button onclick="jumpToTop()" id="jumpToTop" title="Top">&#x2191;</button>
               <dialog id="pdfViewer">
                   <iframe id="pdfFrame"></iframe>
               </dialog>
@@ -125,7 +137,7 @@
                   </p>
               </div>
           </div>
-      </div>
+        </div>
 
       <div class="Contact">
           <div class="Info">
