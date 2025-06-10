@@ -5,155 +5,333 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Christopher Laliberte</title>
     <link rel="icon" href="./TTMRoundel.png" type="image/x-icon"/>
-    <link rel="stylesheet" href="./styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script src="./scripts.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .pdf-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(17, 24, 39, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+        .pdf-overlay iframe {
+            width: 95vw;
+            height: 95vh;
+            max-width: 1200px;
+            max-height: 800px;
+            border: none;
+        }
+        .pdf-overlay .close-button {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 2100;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #111827;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .nav-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        .font-title {
+            font-family: 'Cinzel Decorative', serif;
+            font-weight: 700;
+            font-style: italic;
+        }
+        @media (max-width: 640px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #1f2937;
+                transform: translateX(100%);
+                z-index: 1000;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .nav-menu.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
 </head>
-
-<body>
-    <div class="wrapper">
-      <header>
-          <button class="head_Text" id="secretButton" onclick="Landing()"><em>Christopher Laliberte</em></button>
-          <p class="head_Text"><em>The Tech Musician</em></p>
-          <nav class="nav_container">
-            <button class="nav" onclick="Biography()"><em>Biography</em></button>
-            <button class="nav" onclick="Scores()"><em>Compositions</em></button>
-            <button class="nav" onclick="Contact()"><em>Contact Me</em></button>
-          </nav>
-      </header>
-      
-      <div class="Landing">
-          <p>
-            <em>Thank you for visiting! Dive into Christopher's creative world by using the navigation bar above. Explore his journey as a musician, from his humble beginnings to his innovative blend of music and theory. Discover and experience his compositions, crafted to inspire and resonate with listeners. Stay connected through his social media platforms to follow his latest updates, insights, and creative ventures. Enjoy your visit!</em>   
-          </p>
-          <p id="videoTag">Latest Release</p>
-          <div id="video">
-            <iframe
-            id="youtube-video"
-            frameborder="0"
-            title="Latest Video"
-            allowfullscreen></iframe>
-          </div>
-      </div>
-
-      <div class="Biography">
-          <div class="bio">
-              <img id="biopic" src="./BustCircleBW.jpg" alt="Author holding guitar">
-              <p class="text"><em>Christopher Laliberte is a composer, educator, and musician based in Warren, Maine. Currently completing a Bachelor of Music in Contemporary and Popular Music at the University of Maine at Augusta, he has achieved Summa Cum Laude honors while studying under distinguished mentors such as John Mehrmann (composition) and Dr. Christine Letcher (music theory).<br><br>
-            Christopher’s diverse compositional portfolio spans classical, jazz, rock, and contemporary genres. Notable works include La Mer Tumultueuse et Envoûtant, a modern classical piece for string quintet and seven-string guitar inspired by the Lydian Chromatic Concept, and Toi et Moi à l’Unisson, an alternative synth-rock piece exploring innovative chromatic harmonies. His music showcases his versatility and creativity in the medium.<br><br>
-            Beyond composition, Christopher has demonstrated a strong commitment to education and community engagement. He serves as a music tutor at UMA, guiding students through advanced music theory and arranging. He has also established groundbreaking music programs at the Bolduc Correctional Facility and Maine State Prison, equipping residents with essential skills in performance, theory, and recording arts.<br><br>
-            Christopher is proficient in industry-standard tools such as Sibelius, Finale, and Pro Tools, and holds certifications in voice training through Estill Voice International. His dedication to excellence has been recognized with multiple academic honors, including placement on the University of Maine at Augusta's President’s and Dean's Lists.<br><br>
-            As he furthers his studies, Christopher continues to push the boundaries of musical expression and pedagogy, blending technical expertise with a passion for innovation.</em></p>
-          </div>
-      </div>
-
-      <div class="Scores">
-          <div class="Score-Body">
-              <button onclick="jumpToTop()" id="jumpToTop" title="Top">&#x2191;</button>
-              <dialog id="pdfViewer">
-                  <iframe id="pdfFrame"></iframe>
-              </dialog>
-              <div class="score-item">
-                  <div class="score-controls">
-                      <button onclick="openPDF('./Edelweiss/C. Laliberte - Edelweiss.pdf')">
-                          <img class="score" src="./Edelweiss/C. Laliberte - Edelweiss.jpeg">                
-                      </button>
-                      <button class="audio">
-                          <em>Edelweiss</em>
-                          <audio controls controlsList="nodownload">
-                              <source src="./Edelweiss/C. Laliberte - Edelweiss.mp3">
-                          </audio>
-                      </button>
-                  </div>
-                  <p class="text">
-                      <em>Edelweiss is a jazz focused piece that plays on the balance of comfortability with intentional dissonances.</em>
-                  </p>
-              </div>
-              <div class="score-item">
-                  <div class="score-controls">
-                      <button onclick="openPDF('./InSummerComeFall/C. Laliberte - In Summer, Come Fall.pdf')">
-                          <img class="score" src="./InSummerComeFall/C. Laliberte - In Summer, Come Fall..jpeg">
-                      </button>
-                      <button class="audio">
-                          <em>In Summer, Come Fall</em>
-                          <audio controls controlsList="nodownload">
-                              <source src="./InSummerComeFall/C. Laliberte - In Summer Come Fall.mp3">
-                          </audio>
-                      </button>
-                  </div>
-                  <p class="text">
-                      <em>In Summer, Come Fall is a jazz piece that plays off the tension created by modulation between parallel keys.</em>
-                  </p>
-              </div>
-              <div class="score-item">
-                  <div class="score-controls">
-                      <button onclick="openPDF('./OldPortStruttin/C. Laliberte - Old Port Struttin.pdf')">
-                          <img class="score" src="./OldPortStruttin/OldPortStruttin.jpeg">
-                      </button>
-                      <button class="audio">
-                          <em>Old Port Struttin'</em>
-                          <audio controls controlsList="nodownload">
-                              <source src="./OldPortStruttin/C. Laliberte - Old Port Struttin.mp3">
-                          </audio>
-                      </button>
-                  </div>
-                  <p class="text">
-                      <em>Old Port Struttin' is a nod to Bebop of yesteryear. A straightforward minor Jazz Blues format with some twists.</em>
-                  </p>
-              </div>
-              <div class="score-item">
-                  <div class="score-controls">
-                      <button onclick="openPDF('./Cloch/C. Laliberte - Cloch.pdf')">
-                          <img class="score" src="./Cloch/Cloch.jpeg">
-                      </button>
-                      <button class="audio">
-                          <em>Cloch</em>
-                          <audio controls controlsList="nodownload">
-                              <source src="./Cloch/C. Laliberte - Cloch.mp3">
-                          </audio>
-                      </button>
-                  </div>
-                  <p class="text">
-                      <em>Cloch is the Gaelic word for stone. A tongue in cheek reference to rock, Cloch exhibits moments of Jazz and Rock and combines them into a pseudo prog rock composition that acts as a light introduction into both words.</em>
-                  </p>
-              </div>
-              <div class="score-item">
-                  <div class="score-controls">
-                      <button onclick="openPDF('./EtudeNo1/C. Laliberte - Etude No.1 Pour Guitare a Sept Cordes.pdf')">
-                          <img class="score" src="./EtudeNo1/EtudeNo1.jpeg">
-                      </button>
-                      <button class="audio">
-                          <em>Etude No. 1 (Pour Guitare A Sept Cordes)</em>
-                          <audio controls controlsList="nodownload">
-                              <source src="./EtudeNo1/C. Laliberte - Etude No 1 Pour Guitare A Sept Cordes.mp3">
-                          </audio>
-                      </button>
-                  </div>
-                  <p class="text">
-                      <em>A study into seven string guitars, this etude is meant to be entertaining yet obtainable for those interested in extended range instruments.</em>
-                  </p>
-              </div>
-          </div>
+<body class="bg-gray-800 text-gray-300" style="font-family: 'Noto Serif', serif;", font-style: italic>
+    <nav class="bg-gray-800 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+            <h1 class="text-xl sm:text-2xl font-bold text-teal-400"><em>Christopher Laliberte</em></h1>
+                </div>
+                <div class="sm:hidden">
+                    <button id="menu-toggle" class="text-gray-300 hover:text-teal-600 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden sm:flex items-center space-x-4 nav-menu">
+                    <a href="#home" class="text-teal-300 hover:text-teal-600 text-sm sm:text-base"><em>Home</em></a>
+                    <a href="#about" class="text-teal-300 hover:text-teal-600 text-sm sm:text-base"><em>About</em></a>
+                    <a href="#compositions" class="text-teal-300 hover:text-teal-600 text-sm sm:text-base"><em>Compositions</em></a>
+                    <a href="#contact" class="text-teal-300 hover:text-teal-600 text-sm sm:text-base"><em>Contact</em></a>
+                </div>
+            </div>
+            <div class="sm:hidden nav-menu">
+                <a href="#home" class="text-teal-300 hover:text-teal-600 text-base py-2"><em>Home</em></a>
+                <a href="#about" class="text-teal-300 hover:text-teal-600 text-base py-2"><em>About</em></a>
+                <a href="#compositions" class="text-teal-300 hover:text-teal-600 text-base py-2"><em>Compositions</em></a>
+                <a href="#contact" class="text-teal-300 hover:text-teal-600 text-base py-2"><em>Contact</em></a>
+            </div>
         </div>
+    </nav>
 
-      <div class="Contact">
-          <div class="Info">
-              <button class="links" onclick="openLink('https://www.youtube.com/channel/UCXxyDExQviakr4tr3HB33hQ')">
-                  <h4>YouTube</h4>
-              </button>
-              <button class="links" onclick="openLink('https://www.linkedin.com/in/christopher-laliberte-91a0462a8')">
-                  <h4>LinkedIn</h4>
-              </button>
-              <button class="links" onclick="openLink('https://www.instagram.com/dirigonomad?igsh=MW55bXJlMTZmN3BhYw==')">
-                  <h4>Instagram</h4>
-              </button>
-          </div>
-      </div>
+    <section id="home" class="bg-gradient-to-r from-blue-800 to-teal-900 text-gray-300 py-12 sm:py-16 lg:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold"><em>Explore Christopher's innovative blend of music, theory, and technology</em></h2>
+        <a href="#compositions" class="mt-4 sm:mt-6 inline-block bg-teal-600 text-gray-300 font-semibold py-2 px-4 rounded-lg hover:bg-teal-700 text-sm sm:text-base"><em>Discover Music</em></a>
+        </div>
+    </section>
 
-      <footer>
-          <p>&copy; 2025 Christopher Laliberte</p>
-      </footer>
-    <div>
-  </body>
+    <section id="video" class="py-12 sm:py-16 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-teal-400"><em>Latest Performance</em></h2>
+            <div class="mt-6 sm:mt-8 video-container">
+                <iframe id="latest-video" title="Latest YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-12 sm:py-16 bg-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-teal-400"><em>About Christopher</em></h2>
+            <div class="mt-6 sm:mt-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+                <div class="md:w-1/2">
+                    <img src="./Wheeler Grad Photo.jpg" class="rounded-lg shadow-lg w-full max-w-md mx-auto">
+                </div>
+                <div class="md:w-1/2 mt-4 sm:mt-6 md:mt-0 md:pl-6">
+                  <p class="text-base sm:text-lg text-teal-500"><em>At just ten years old, Christopher Laliberte plucked his first guitar strings in a small Maine town, sparking a lifelong love affair with music. Those early chords grew into compositions that danced between imagination and structure, setting the stage for a career as a composer, guitarist, and songwriter. Growing up amidst Maine’s serene forests and rugged seas, Christopher found inspiration in the whisper of pine needles and the crash of waves against rocky shores. These landscapes infuse his music with a raw, elemental beauty, capturing both the tranquility and turbulence of the natural world.</em></p>
+                  <p class="mt-4 text-base sm:text-lg text-teal-500"><em>Christopher’s artistry lies in a rare communion of cerebral composition and soulful songwriting. He wields complex music theory like a painter’s brush, crafting intricate harmonic tapestries, yet always anchors his work with melodies that linger in the heart. Pieces like <span class="font-title">La Mer Tumultueuse et Envoûtant</span> and <span class="font-title">Old Port Struttin’</span> pulse with this duality; intellectual depth wrapped in irresistible hooks. His journey brought him to the University of Maine at Augusta, where he earned a Bachelor of Music in Contemporary and Popular Music with Summa Cum Laude honors, and his current pursuit of a Master’s in Songwriting at Berklee Online, further honing his craft of blending academic precision with creative fire.</em></p>
+                  <p class="mt-4 text-base sm:text-lg text-teal-500"><em>Beyond performance, he’s shared music’s transformative power, creating programs at Maine’s correctional facilities and mentoring peers as a music tutor. Whether composing in the shadow of spruce or performing under stage lights, Christopher Laliberte invites listeners into a world where Maine’s wild beauty meets the alchemy of melody and theory. Discover his music on <a href="https://www.youtube.com/channel/UCTPxOafLB3PA6Twtl18dw2g" class="text-teal-700 hover:underline" target="_blank">YouTube</a> or connect on <a href="https://linkedin.com/in/christopher-laliberte-91a0462a8" class="text-teal-700 hover:underline" target="_blank">LinkedIn</a>.</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="compositions" class="bg-gray-700 py-12 sm:py-16" style="font-style: italic;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-teal-400">Compositions</h2>
+            <div class="mt-6 sm:mt-8">
+                <h3 class="text-xl sm:text-2xl font-semibold text-teal-400 mt-6">Lead Sheets with Lyrics</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">The Sound of You</span> (2025)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A lyrical exploration of love’s resonance, blending jazz and pop sensibilities.</p>
+                        <a href="./SeniorJury/C. Laliberte - The Sound of You.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - The Sound of You.pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">I Loved You Before I Was Born</span> (2025)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A heartfelt ballad weaving poetic lyrics with intricate chord progressions.</p>
+                        <a href="./SeniorJury/C. Laliberte - I Loved You Before I Was Born.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - I Loved You Before I Was Born.pdf">View Score</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-semibold text-teal-400 mt-6">Lead Sheets without Lyrics</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Edelweiss</span> (2023)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A jazz-focused piece balancing comfort with intentional dissonances.</p>
+                        <a href="./SeniorJury/C. Laliberte - Edelweiss.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Edelweiss.pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Old Port Struttin'</span> (2024)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A nod to Bebop with a minor Jazz Blues format and unique twists.</p>
+                        <a href="./SeniorJury/C. Laliberte - Old Port Struttin'.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Old Port Struttin'.pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Dark Roast Café</span> (2024)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A smooth jazz piece evoking the cozy ambiance of a bustling café.</p>
+                        <a href="./SeniorJury/C. Laliberte - Dark Roast Cafe.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Dark Roast Cafe.pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">In Summer, Come Fall</span> (2023)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A jazz piece exploring tension through modulation between parallel keys.</p>
+                        <a href="./SeniorJury/C. Laliberte - In Summer, Come Fall.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - In Summer, Come Fall.pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Sundress</span> (2025)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A breezy jazz composition with vibrant, uplifting melodies.</p>
+                        <a href="./SeniorJury/C. Laliberte - Sundress.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Sundress.pdf">View Score</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-semibold text-teal-400 mt-6">For Rock Band</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Cloch</span> (2024)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A prog rock piece blending jazz and rock, inspired by the Gaelic word for stone.</p>
+                        <a href="./SeniorJury/C. Laliberte - Cloch.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Cloch.pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">The Growing of Fern</span> (2025)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A dynamic rock composition inspired by nature’s resilience.</p>
+                        <a href="./SeniorJury/C. Laliberte - The Growing of Fern.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - The Growing of Fern.pdf">View Score</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-semibold text-teal-400 mt-6">For Solo Seven String Guitar</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Etude No.1 (pour guitare à sept cordes)</span> (2024)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A technical study for seven-string guitar, blending accessibility and virtuosity.</p>
+                        <a href="./SeniorJury/C. Laliberte - Etude No.1(Pour Guitare a Sept Cordes).pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Etude No.1(Pour Guitare a Sept Cordes).pdf">View Score</a>
+                    </div>
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">Etude No.2 (pour guitare à sept cordes)</span> (2025)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A study introducing counterpoint for seven-string guitar.</p>
+                        <a href="./SeniorJury/C. Laliberte - Etude No.2(Pour Guitare a Sept Cordes).pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - Etude No.2(Pour Guitare a Sept Cordes).pdf">View Score</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-semibold text-teal-400 mt-6">For Seven String Guitar and Bassoon</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">L'entrelacement des âmes</span> (2025)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A lyrical duet intertwining the soulful tones of guitar and bassoon.</p>
+                        <a href="./SeniorJury/C. Laliberte - L'entrelacement des ames.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - L'entrelacement des ames.pdf">View Score</a>
+                    </div>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-semibold text-teal-400 mt-6">For String Quartet, Double Bass, Seven String Guitar</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-4">
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md">
+                        <h4 class="text-lg sm:text-xl font-semibold text-teal-400"><span class="font-title">La mer tumultueuse et envoûtante</span> (2026)</h4>
+                        <p class="mt-2 text-sm sm:text-base text-teal-500">A cinematic work capturing the sea’s turbulent beauty through rich textures.</p>
+                        <a href="./SeniorJury/C. Laliberte - La mer tumultueuse et envoutante.pdf" class="mt-3 sm:mt-4 inline-block text-teal-600 hover:underline pdf-link text-sm sm:text-base" data-pdf="./SeniorJury/C. Laliberte - La mer tumultueuse et envoutante.pdf">View Score</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-12 sm:py-16 bg-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-teal-400"><em>Stay Connected</em></h2>
+        <p class="mt-4 text-base sm:text-lg text-teal-500"><em>Follow Christopher on social media for updates and insights.</em></p>
+            <div class="mt-4 sm:mt-6 flex flex-wrap justify-center gap-4 sm:gap-6">
+          <a href="https://www.youtube.com/channel/UCTPxOafLB3PA6Twtl18dw2g" class="text-gray-400 hover:text-teal-600 text-sm sm:text-base" target="_blank"><em>YouTube</em></a>
+          <a href="https://www.instagram.com/dirigonomad?igsh=MW55bxJlMTZmN3BhYw==" class="text-gray-400 hover:text-teal-600 text-sm sm:text-base" target="_blank"><em>Instagram</em></a>
+          <a href="" class="text-gray-400 hover:text-teal-600 text-sm sm:text-base" target="_blank"><em>Facebook</em></a>
+          <a href="https://linkedin.com/in/christopher-laliberte-91a0462a8" class="text-gray-400 hover:text-teal-600 text-sm sm:text-base" target="_blank"><em>LinkedIn</em></a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-teal-400 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm sm:text-base"><em>© 2025 Christopher Laliberte. All rights reserved.</em></p>
+        </div>
+    </footer>
+
+    <div class="pdf-overlay" id="pdfOverlay">
+        <span class="close-button" id="pdfClose">×</span>
+        <iframe id="pdfFrame" src=""></iframe>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('open');
+        });
+
+        // YouTube API Setup
+        <!--const apiKey = 'AIzaSyB9cQ7Njchq_nyFOBHlwTTgPeCUJDuOMrE';-->
+        const channelId = 'UCTPxOafLB3PA6Twtl18dw2g';
+
+        async function fetchLatestVideo() {
+            try {
+                const channelResponse = await fetch(
+                    `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`
+                );
+                const channelData = await channelResponse.json();
+                const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+
+                const playlistResponse = await fetch(
+                    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${uploadsPlaylistId}&key=${apiKey}`
+                );
+                const playlistData = await playlistResponse.json();
+                const videoId = playlistData.items[0].snippet.resourceId.videoId;
+
+                document.getElementById('latest-video').src = `https://www.youtube.com/embed/${videoId}`;
+            } catch (error) {
+                console.error('Error fetching YouTube video:', error);
+                document.getElementById('latest-video').parentElement.innerHTML = '<p class="text-gray-300 text-center text-sm sm:text-base">Unable to load latest video.</p>';
+            }
+        }
+
+        fetchLatestVideo();
+
+        // PDF Overlay Functionality
+        const overlay = document.getElementById('pdfOverlay');
+        const pdfFrame = document.getElementById('pdfFrame');
+        const pdfClose = document.getElementById('pdfClose');
+
+        // Detect mobile device
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        document.querySelectorAll('.pdf-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pdfUrl = link.dataset.pdf;
+                if (isMobile) {
+                    window.open(pdfUrl, '_blank');
+                } else {
+                    overlay.style.display = 'flex';
+                    pdfFrame.src = pdfUrl;
+                }
+            });
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.style.display = 'none';
+                pdfFrame.src = '';
+            }
+        });
+
+        pdfClose.addEventListener('click', () => {
+            overlay.style.display = 'none';
+            pdfFrame.src = '';
+        });
+    </script>
+</body>
 </html>

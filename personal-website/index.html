@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christopher Laliberte</title>
+    <link rel="icon" href="./TTMRoundel.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playwrite+US+Trad:wght@100..400&display=swap" rel="stylesheet">
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="./scripts.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+      <header>
+          <button class="head_Text" id="secretButton" onclick="Landing()"><em>Christopher Laliberte</em></button>
+          <p class="head_Text"><em>The Tech Musician</em></p>
+          <nav class="nav_container">
+            <button class="nav" onclick="Biography()"><em>Biography</em></button>
+            <button class="nav" onclick="Scores()"><em>Compositions</em></button>
+            <button class="nav" onclick="Contact()"><em>Contact Me</em></button>
+          </nav>
+      </header>
+      
+      <div class="Landing">
+          <p>
+            <em>Thank you for visiting! Dive into Christopher's creative world by using the navigation bar above. Explore his journey as a musician, from his humble beginnings to his innovative blend of music and theory. Discover and experience his compositions, crafted to inspire and resonate with listeners. Stay connected through his social media platforms to follow his latest updates, insights, and creative ventures. Enjoy your visit!</em>   
+          </p>
+          <p id="videoTag">Latest Release</p>
+          <div id="video">
+            <iframe
+            id="youtube-video"
+            frameborder="0"
+            title="Latest Video"
+            allowfullscreen></iframe>
+          </div>
+      </div>
+
+      <div class="Biography">
+          <div class="bio">
+              <img id="biopic" src="./BustCircleBW.jpg" alt="Author holding guitar">
+              <p class="text"><em>Christopher Laliberte is a composer, educator, and musician based in Warren, Maine. Currently completing a Bachelor of Music in Contemporary and Popular Music at the University of Maine at Augusta, he has achieved Summa Cum Laude honors while studying under distinguished mentors such as John Mehrmann (composition) and Dr. Christine Letcher (music theory).<br><br>
+            Christopher’s diverse compositional portfolio spans classical, jazz, rock, and contemporary genres. Notable works include La Mer Tumultueuse et Envoûtant, a modern classical piece for string quintet and seven-string guitar inspired by the Lydian Chromatic Concept, and Toi et Moi à l’Unisson, an alternative synth-rock piece exploring innovative chromatic harmonies. His music showcases his versatility and creativity in the medium.<br><br>
+            Beyond composition, Christopher has demonstrated a strong commitment to education and community engagement. He serves as a music tutor at UMA, guiding students through advanced music theory and arranging. He has also established groundbreaking music programs at the Bolduc Correctional Facility and Maine State Prison, equipping residents with essential skills in performance, theory, and recording arts.<br><br>
+            Christopher is proficient in industry-standard tools such as Sibelius, Finale, and Pro Tools, and holds certifications in voice training through Estill Voice International. His dedication to excellence has been recognized with multiple academic honors, including placement on the University of Maine at Augusta's President’s and Dean's Lists.<br><br>
+            As he furthers his studies, Christopher continues to push the boundaries of musical expression and pedagogy, blending technical expertise with a passion for innovation.</em></p>
+          </div>
+      </div>
+
+      <div class="Scores">
+          <div class="Score-Body">
+              <button onclick="jumpToTop()" id="jumpToTop" title="Top">&#x2191;</button>
+              <dialog id="pdfViewer">
+                  <iframe id="pdfFrame"></iframe>
+              </dialog>
+              <div class="score-item">
+                  <div class="score-controls">
+                      <button onclick="openPDF('./Edelweiss/C. Laliberte - Edelweiss.pdf')">
+                          <img class="score" src="./Edelweiss/C. Laliberte - Edelweiss.jpeg">                
+                      </button>
+                      <button class="audio">
+                          <em>Edelweiss</em>
+                          <audio controls controlsList="nodownload">
+                              <source src="./Edelweiss/C. Laliberte - Edelweiss.mp3">
+                          </audio>
+                      </button>
+                  </div>
+                  <p class="text">
+                      <em>Edelweiss is a jazz focused piece that plays on the balance of comfortability with intentional dissonances.</em>
+                  </p>
+              </div>
+              <div class="score-item">
+                  <div class="score-controls">
+                      <button onclick="openPDF('./InSummerComeFall/C. Laliberte - In Summer, Come Fall.pdf')">
+                          <img class="score" src="./InSummerComeFall/C. Laliberte - In Summer, Come Fall..jpeg">
+                      </button>
+                      <button class="audio">
+                          <em>In Summer, Come Fall</em>
+                          <audio controls controlsList="nodownload">
+                              <source src="./InSummerComeFall/C. Laliberte - In Summer Come Fall.mp3">
+                          </audio>
+                      </button>
+                  </div>
+                  <p class="text">
+                      <em>In Summer, Come Fall is a jazz piece that plays off the tension created by modulation between parallel keys.</em>
+                  </p>
+              </div>
+              <div class="score-item">
+                  <div class="score-controls">
+                      <button onclick="openPDF('./OldPortStruttin/C. Laliberte - Old Port Struttin.pdf')">
+                          <img class="score" src="./OldPortStruttin/OldPortStruttin.jpeg">
+                      </button>
+                      <button class="audio">
+                          <em>Old Port Struttin'</em>
+                          <audio controls controlsList="nodownload">
+                              <source src="./OldPortStruttin/C. Laliberte - Old Port Struttin.mp3">
+                          </audio>
+                      </button>
+                  </div>
+                  <p class="text">
+                      <em>Old Port Struttin' is a nod to Bebop of yesteryear. A straightforward minor Jazz Blues format with some twists.</em>
+                  </p>
+              </div>
+              <div class="score-item">
+                  <div class="score-controls">
+                      <button onclick="openPDF('./Cloch/C. Laliberte - Cloch.pdf')">
+                          <img class="score" src="./Cloch/Cloch.jpeg">
+                      </button>
+                      <button class="audio">
+                          <em>Cloch</em>
+                          <audio controls controlsList="nodownload">
+                              <source src="./Cloch/C. Laliberte - Cloch.mp3">
+                          </audio>
+                      </button>
+                  </div>
+                  <p class="text">
+                      <em>Cloch is the Gaelic word for stone. A tongue in cheek reference to rock, Cloch exhibits moments of Jazz and Rock and combines them into a pseudo prog rock composition that acts as a light introduction into both words.</em>
+                  </p>
+              </div>
+              <div class="score-item">
+                  <div class="score-controls">
+                      <button onclick="openPDF('./EtudeNo1/C. Laliberte - Etude No.1 Pour Guitare a Sept Cordes.pdf')">
+                          <img class="score" src="./EtudeNo1/EtudeNo1.jpeg">
+                      </button>
+                      <button class="audio">
+                          <em>Etude No. 1 (Pour Guitare A Sept Cordes)</em>
+                          <audio controls controlsList="nodownload">
+                              <source src="./EtudeNo1/C. Laliberte - Etude No 1 Pour Guitare A Sept Cordes.mp3">
+                          </audio>
+                      </button>
+                  </div>
+                  <p class="text">
+                      <em>A study into seven string guitars, this etude is meant to be entertaining yet obtainable for those interested in extended range instruments.</em>
+                  </p>
+              </div>
+          </div>
+        </div>
+
+      <div class="Contact">
+          <div class="Info">
+              <button class="links" onclick="openLink('https://www.youtube.com/channel/UCXxyDExQviakr4tr3HB33hQ')">
+                  <h4>YouTube</h4>
+              </button>
+              <button class="links" onclick="openLink('https://www.linkedin.com/in/christopher-laliberte-91a0462a8')">
+                  <h4>LinkedIn</h4>
+              </button>
+              <button class="links" onclick="openLink('https://www.instagram.com/dirigonomad?igsh=MW55bXJlMTZmN3BhYw==')">
+                  <h4>Instagram</h4>
+              </button>
+          </div>
+      </div>
+
+      <footer>
+          <p>&copy; 2025 Christopher Laliberte</p>
+      </footer>
+    <div>
+  </body>
+</html>
