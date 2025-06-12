@@ -264,37 +264,48 @@
         // YouTube API Proxy
         async function fetchLatestVideo() {
             try {
-                const response = await fetch(`${backendUrl}/youtube/channels`, {
+                console.log('Fetching channels...');
+                const channelResponse = await fetch(`${backendUrl}/youtube/channels`, {
                     headers: { 'Authorization': `Bearer ${clientApiKey}` }
                 });
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Channels API failed: ${response.status} - ${errorText}`);
+                console.log('Channel response status:', channelResponse.status);
+                if (!channelResponse.ok) {
+                    const errorText = await channelResponse.text();
+                    console.error('Channel error:', errorText);
+                    throw new Error(`Channels API failed: ${channelResponse.status} - ${errorText}`);
                 }
-                const channelData = await response.json();
+                const channelData = await channelResponse.json();
+                console.log('Channel data:', channelData);
                 if (!channelData.items?.length) {
                     throw new Error('No channel data found');
                 }
                 const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+                console.log('Uploads playlist ID:', uploadsPlaylistId);
 
+                console.log('Fetching playlist...');
                 const playlistResponse = await fetch(
                     `${backendUrl}/youtube/playlist?playlistId=${uploadsPlaylistId}`,
                     { headers: { 'Authorization': `Bearer ${clientApiKey}` } }
                 );
+                console.log('Playlist response status:', playlistResponse.status);
                 if (!playlistResponse.ok) {
                     const errorText = await playlistResponse.text();
+                    console.error('Playlist error:', errorText);
                     throw new Error(`Playlist API failed: ${playlistResponse.status} - ${errorText}`);
                 }
                 const playlistData = await playlistResponse.json();
+                console.log('Playlist data:', playlistData);
                 if (!playlistData.items?.length) {
                     throw new Error('No playlist items found');
                 }
                 const videoId = playlistData.items[0].snippet.resourceId.videoId;
+                console.log('Video ID:', videoId);
 
                 document.getElementById('latest-video').src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0`;
+                console.log('YouTube iframe updated with video ID:', videoId);
             } catch (error) {
                 console.error('YouTube Error:', error.message);
-                document.getElementById('latest-video').parentElement.innerHTML = '<p class="text-gray-500 text-center text-sm sm:text-base">Failed to load video: Check console for details</p>';
+                document.getElementById('latest-video').parentElement.innerHTML = '<p class="text-gray-500 text-center text-sm sm:text-base">Failed to load video: ' + error.message + '</p>';
             }
         }
 
@@ -304,24 +315,27 @@
         const pdfOverlay = document.getElementById('pdfOverlay');
         const pdfViewer = document.getElementById('pdfViewer');
         document.querySelectorAll('.pdf-link').forEach(link => {
-            link.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const filename = link.dataset.pdf;
+            link.addEventListener('click', async (event) => {
+                event.preventDefault();
+                const filename = link.getAttribute('data-pdf');
                 const encodedFilename = encodeURIComponent(filename);
                 const pdfUrl = `${backendUrl}/pdf/${encodedFilename}`;
-                console.log('Loading PDF:', pdfUrl);
+                console.log('Attempting to load PDF:', pdfUrl);
 
                 try {
                     const response = await fetch(pdfUrl);
+                    console.log('PDF response status:', response.status);
                     if (!response.ok) {
                         const errorText = await response.text();
+                        console.error('PDF error:', errorText);
                         throw new Error(`PDF fetch failed: ${response.status} - ${errorText}`);
                     }
                     pdfViewer.innerHTML = `<iframe src="${pdfUrl}" class="w-full h-full" frameborder="0" allow="fullscreen"></iframe>`;
                     pdfOverlay.style.display = 'flex';
+                    console.log('PDF iframe loaded:', pdfUrl);
                 } catch (err) {
                     console.error('PDF Error:', err.message);
-                    alert('Failed to load PDF: Check console for details');
+                    alert('Failed to load PDF: ' + err.message);
                 }
             });
         });
