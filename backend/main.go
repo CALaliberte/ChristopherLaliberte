@@ -8,7 +8,6 @@ import (
     "net/http"
     "os"
     "path/filepath"
-    "strings"
 
     "github.com/gin-gonic/gin"
     "github.com/joho/godotenv"
@@ -44,110 +43,86 @@ func main() {
     if port == "" {
         port = "5000"
     }
+    apiKey := os.Getenv("YOUTUBE_API_KEY")
 
     r := gin.Default()
 
-    // Serve static files from the parent directory
+    // Serve static files
     r.Static("/static", "../")
-    // Redirect root to index.html
     r.GET("/", func(c *gin.Context) {
         c.File("../index.html")
     })
 
-    r.GET("/youtube/channels", func(c *gin.Context) {
-        apiKey := c.GetHeader("Authorization")
-        if !strings.HasPrefix(apiKey, "Bearer ") {
-            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization header"})
-            return
-        }
-        apiKey = strings.TrimPrefix(apiKey, "Bearer ")
-
-        url := "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&mine=true"
-        req, err := http.NewRequest("GET", url, nil)
+    // YouTube latest video
+    r.GET("/youtube/latest", func(c *gin.Context) {
+        channelUrl := "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&channelId=UCTPxOafLB3PA6Twtl18dw2g&key=" + apiKey
+        resp, err := http.Get(channelUrl)
         if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-            return
-        }
-        req.Header.Set("Authorization", "Bearer "+apiKey)
-
-        client := &http.Client{}
-        resp, err := client.Do(req)
-        if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error fetching channel</p>"))
             return
         }
         defer resp.Body.Close()
 
         body, err := io.ReadAll(resp.Body)
         if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error reading channel</p>"))
             return
         }
 
         var channelResp ChannelResponse
         if err := json.Unmarshal(body, &channelResp); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error parsing channel</p>"))
             return
         }
-
-        c.Data(resp.StatusCode, "application/json", body)
-    })
-
-    r.GET("/youtube/playlist", func(c *gin.Context) {
-        apiKey := c.GetHeader("Authorization")
-        if !strings.HasPrefix(apiKey, "Bearer ") {
-            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization header"})
+        if len(channelResp.Items) == 0 {
+            c.Data(http.StatusNotFound, "text/html", []byte("<p class='text-gray-500 text-center'>No channel data</p>"))
             return
         }
-        apiKey = strings.TrimPrefix(apiKey, "Bearer ")
+        uploadsPlaylistId := channelResp.Items[0].ContentDetails.RelatedPlaylists.Uploads
 
-        playlistId := c.Query("playlistId")
-        if playlistId == "" {
-            c.JSON(http.StatusBadRequest, gin.H{"error": "Missing playlistId parameter"})
-            return
-        }
-
-        url := fmt.Sprintf("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=%s&maxResults=1", playlistId)
-        req, err := http.NewRequest("GET", url, nil)
+        playlistUrl := fmt.Sprintf("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=%s&maxResults=1&key=%s", uploadsPlaylistId, apiKey)
+        resp, err = http.Get(playlistUrl)
         if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-            return
-        }
-        req.Header.Set("Authorization", "Bearer "+apiKey)
-
-        client := &http.Client{}
-        resp, err := client.Do(req)
-        if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error fetching playlist</p>"))
             return
         }
         defer resp.Body.Close()
 
-        body, err := io.ReadAll(resp.Body)
+        body, err = io.ReadAll(resp.Body)
         if err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error reading playlist</p>"))
             return
         }
 
         var playlistResp PlaylistResponse
         if err := json.Unmarshal(body, &playlistResp); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error parsing playlist</p>"))
             return
         }
+        if len(playlistResp.Items) == 0 {
+            c.Data(http.StatusNotFound, "text/html", []byte("<p class='text-gray-500 text-center'>No videos found</p>"))
+            return
+        }
+        videoId := playlistResp.Items[0].Snippet.ResourceId.VideoId
 
-        c.Data(resp.StatusCode, "application/json", body)
+        c.Data(http.StatusOK, "text/html", []byte(fmt.Sprintf(`
+            <iframe id="latest-video" title="Latest YouTube Video" src="https://www.youtube.com/embed/%s?enablejsapi=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        `, videoId)))
     })
 
+    // PDF endpoint
     r.GET("/pdf/:filename", func(c *gin.Context) {
         filename := c.Param("filename")
         filePath := filepath.Join("../SeniorJury", filename)
 
         if _, err := os.Stat(filePath); os.IsNotExist(err) {
-            c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+            c.Data(http.StatusNotFound, "text/html", []byte("<p class='text-gray-500 text-center'>PDF not found</p>"))
             return
         }
 
-        c.File(filePath)
+        c.Data(http.StatusOK, "text/html", []byte(fmt.Sprintf(`
+            <iframe src="/static/SeniorJury/%s" class="w-full h-full" frameborder="0" allow="fullscreen"></iframe>
+        `, filename)))
     })
 
     r.Run(":" + port)
