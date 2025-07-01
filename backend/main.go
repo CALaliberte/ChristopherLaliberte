@@ -49,7 +49,7 @@ func main() {
     r := gin.Default()
 
     // Serve static files
-    r.Static("/static", "../")
+    r.Static("/SeniorJury", "../")
     r.GET("/", func(c *gin.Context) {
         c.File("../index.html")
     })
@@ -124,7 +124,7 @@ func main() {
     // PDF endpoint
     r.GET("/pdf/:filename", func(c *gin.Context) {
         filename := c.Param("filename")
-        filePath := filepath.Join("../SeniorJury", filename)
+        filePath := filepath.Join("./SeniorJury", filename)
         
         // Prevent directory traversal
         cleanPath, err := filepath.Abs(filePath)
@@ -134,7 +134,7 @@ func main() {
         }
 
         // Ensure the path is within the expected directory
-        juryDir, _ := filepath.Abs("../SeniorJury")
+        juryDir, _ := filepath.Abs("./SeniorJury")
         if !filepath.HasPrefix(cleanPath, juryDir) {
             c.Data(http.StatusBadRequest, "text/html", []byte("<p class='text-gray-500 text-center'>Invalid path</p>"))
             return
