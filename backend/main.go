@@ -147,7 +147,7 @@ func main() {
 
         encodedFilename := url.PathEscape(filename)
         c.Data(http.StatusOK, "text/html", []byte(fmt.Sprintf(`
-            <iframe src="/static/SeniorJury/%s" class="w-full h-full" frameborder="0" allow="fullscreen"></iframe>
+            <iframe src="/SeniorJury/%s" class="w-full h-full" frameborder="0" allow="fullscreen"></iframe>
         `, encodedFilename)))
     })
 
