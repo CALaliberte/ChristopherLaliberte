@@ -49,7 +49,7 @@ func main() {
     r := gin.Default()
 
     // Serve static files
-    r.Static("/SeniorJury", "../")
+    r.Static("/SeniorJury", "./SeniorJury")
     r.GET("/", func(c *gin.Context) {
         c.File("../index.html")
     })
