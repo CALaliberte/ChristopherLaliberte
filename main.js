@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to open the modal with the correct PDF
     const openModal = (pdfFile) => {
         if (pdfViewer && pdfOverlay) {
-            const pdfPath = `/backend/SeniorJury/${encodeURIComponent(pdfFile)}`;
+            const pdfPath = `/pdf/${encodeURIComponent(pdfFile)}`;
             pdfViewer.setAttribute('src', pdfPath);
             pdfOverlay.classList.add('active');
             document.addEventListener('keydown', handleEscape);

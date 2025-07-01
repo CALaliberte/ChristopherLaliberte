@@ -123,33 +123,39 @@ func main() {
 
     // PDF endpoint
     r.GET("/pdf/:filename", func(c *gin.Context) {
-        filename := c.Param("filename")
-        filePath := filepath.Join("./SeniorJury", filename)
-        
-        // Prevent directory traversal
-        cleanPath, err := filepath.Abs(filePath)
-        if err != nil {
-            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Internal server error</p>"))
-            return
-        }
+    filename := c.Param("filename")
+    baseDir, err := os.Getwd()
+    if err != nil {
+        log.Printf("Error getting working directory: %v", err)
+        c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Internal server error</p>"))
+        return
+    }
+    filePath := filepath.Join("SeniorJury", filename)
+    cleanPath := filepath.Join(baseDir, filePath)
+    juryDir := filepath.Join(baseDir, "SeniorJury")
+    log.Printf("Requested file: %s, Resolved path: %s, JuryDir: %s", filename, cleanPath, juryDir)
 
-        // Ensure the path is within the expected directory
-        juryDir, _ := filepath.Abs("./SeniorJury")
-        if !filepath.HasPrefix(cleanPath, juryDir) {
-            c.Data(http.StatusBadRequest, "text/html", []byte("<p class='text-gray-500 text-center'>Invalid path</p>"))
-            return
-        }
+    fileInfo, err := os.Stat(cleanPath)
+    if os.IsNotExist(err) {
+        log.Printf("File not found: %s", cleanPath)
+        c.Data(http.StatusNotFound, "text/html", []byte("<p class='text-gray-500 text-center'>PDF not found</p>"))
+        return
+    }
+    if err != nil {
+        log.Printf("Error checking file %s: %v", cleanPath, err)
+        c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Internal server error</p>"))
+        return
+    }
+    log.Printf("File found: %s, Size: %d bytes, Permissions: %s", cleanPath, fileInfo.Size(), fileInfo.Mode())
 
-        if _, err := os.Stat(cleanPath); os.IsNotExist(err) {
-            c.Data(http.StatusNotFound, "text/html", []byte("<p class='text-gray-500 text-center'>PDF not found</p>"))
-            return
-        }
+    if !filepath.HasPrefix(cleanPath, juryDir) {
+        log.Printf("Invalid path: %s does not start with %s", cleanPath, juryDir)
+        c.Data(http.StatusBadRequest, "text/html", []byte("<p class='text-gray-500 text-center'>Invalid path</p>"))
+        return
+    }
 
-        encodedFilename := url.PathEscape(filename)
-        c.Data(http.StatusOK, "text/html", []byte(fmt.Sprintf(`
-            <iframe src="/SeniorJury/%s" class="w-full h-full" frameborder="0" allow="fullscreen"></iframe>
-        `, encodedFilename)))
-    })
-
-    r.Run(":" + port)
+    encodedFilename := url.PathEscape(filename)
+    c.Redirect(http.StatusFound, fmt.Sprintf("/SeniorJury/%s", encodedFilename))
+})    
+  r.Run(":" + port)
 }

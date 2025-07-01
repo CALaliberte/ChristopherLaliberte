@@ -13,38 +13,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <style>
-        .pdf-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        .pdf-overlay.active {
-            display: flex;
-        }
-        .pdf-overlay #pdfViewer {
-            width: 90vw;
-            height: 90vh;
-            max-width: 1200px;
-            max-height: 800px;
-            background: white;
-        }
-        .pdf-overlay .close-button {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            color: #fff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 2101;
-        }
+      .pdf-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+        overflow: auto; /* Allow scrolling if PDF overflows */
+      }
+      .pdf-overlay.active {
+        display: flex;
+      }
+      .pdf-overlay #pdfViewer {
+        width: 90vw;
+        height: 90vh;
+        max-width: 1200px;
+        max-height: 800px;
+        background: white;
+        display: block; /* Ensure iframe behaves as a block */
+      }
+      .pdf-overlay .close-button {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 2101;
+      }
+    /* Add PDF scaling */
+      .pdf-overlay #pdfViewer[src$=".pdf"] {
+        object-fit: contain; /* Ensure PDF scales within iframe */
+        width: 100%;
+        height: 100%;
+      }
         .video-container {
             position: relative;
             padding-bottom: 56.25%;
