@@ -6,6 +6,7 @@ import (
     "io"
     "log"
     "net/http"
+    "net/url"
     "os"
     "path/filepath"
 
@@ -52,10 +53,20 @@ func main() {
     r.GET("/", func(c *gin.Context) {
         c.File("../index.html")
     })
+    r.GET("/main.js", func(c *gin.Context) {
+        c.File("../main.js")
+    })
 
     // YouTube latest video
     r.GET("/youtube/latest", func(c *gin.Context) {
-        channelUrl := "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&channelId=UCTPxOafLB3PA6Twtl18dw2g&key=" + apiKey
+        if apiKey == "" {
+            c.JSON(http.StatusInternalServerError, gin.H{
+                "error": "YouTube API key is missing. Please configure the API key to fetch the latest video.",
+            })
+            return
+        }
+
+        channelUrl := "https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=UCTPxOafLB3PA6Twtl18dw2g&key=" + apiKey
         resp, err := http.Get(channelUrl)
         if err != nil {
             c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Error fetching channel</p>"))
@@ -114,15 +125,30 @@ func main() {
     r.GET("/pdf/:filename", func(c *gin.Context) {
         filename := c.Param("filename")
         filePath := filepath.Join("../SeniorJury", filename)
+        
+        // Prevent directory traversal
+        cleanPath, err := filepath.Abs(filePath)
+        if err != nil {
+            c.Data(http.StatusInternalServerError, "text/html", []byte("<p class='text-gray-500 text-center'>Internal server error</p>"))
+            return
+        }
 
-        if _, err := os.Stat(filePath); os.IsNotExist(err) {
+        // Ensure the path is within the expected directory
+        juryDir, _ := filepath.Abs("../SeniorJury")
+        if !filepath.HasPrefix(cleanPath, juryDir) {
+            c.Data(http.StatusBadRequest, "text/html", []byte("<p class='text-gray-500 text-center'>Invalid path</p>"))
+            return
+        }
+
+        if _, err := os.Stat(cleanPath); os.IsNotExist(err) {
             c.Data(http.StatusNotFound, "text/html", []byte("<p class='text-gray-500 text-center'>PDF not found</p>"))
             return
         }
 
+        encodedFilename := url.PathEscape(filename)
         c.Data(http.StatusOK, "text/html", []byte(fmt.Sprintf(`
             <iframe src="/static/SeniorJury/%s" class="w-full h-full" frameborder="0" allow="fullscreen"></iframe>
-        `, filename)))
+        `, encodedFilename)))
     })
 
     r.Run(":" + port)
